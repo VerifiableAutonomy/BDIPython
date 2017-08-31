@@ -1,4 +1,5 @@
 import time
+from inspect import signature
 
 class Agent:
 	
@@ -16,29 +17,30 @@ class Agent:
 
     # REASONING CYCLE
     def run_agent(self):
+        # From original pi2go implementation - potentiall need to account for intitialisation functions.
         # robohat.init()
         self.running = 1
         # dummy_rule is a catch all if no other rule applies
         self.add_rule(self.dummy_rule)
         while (self.running):
-            self.reason()
+            self.reason('no platform','no rule info')
     
-    def reason(self,robot,rule_info):
-#        self.getpercepts(self.beliefbase)
+    def reason(self,platform,rule_info):
+        # Note this was originally part of the agent but we now anticipate different applications will
+        # want to use different belief update functions.  Need to find an elegant way to integrate this.
+        self.getpercepts(self.beliefbase)
         self.manage_goals(self.beliefbase, self.goalbase)
         selected_rule = self.selectRule(self.beliefbase, self.goalbase)
-        self.execute(selected_rule, robot, rule_info)
+        self.execute(selected_rule, platform, rule_info)
 
-#==============================================================================
-#     def getpercepts(self, beliefbase):
-# 		time.sleep(0.1)
-# 		return
-# 
-#==============================================================================
+    def getpercepts(self, beliefbase):
+        time.sleep(0.1)
+        return
+ 
     def manage_goals(self, beliefbase, goalbase):
         for goal in self.goalbase:
             if (self.is_achieved(goal)):
-                print goal, " Goal Achieved!"
+                print (goal, " Goal Achieved!")
                 self.achieved_goal(goal, goalbase)
         return
 
@@ -75,7 +77,12 @@ class Agent:
                 return selected_rule
 
     def execute(self, rule, robot, rule_info):
-        rule(robot, rule_info)
+        sig = signature(rule)
+        params = sig.parameters
+        if (len(params) == 0):
+            rule()
+        else:
+            rule(robot, rule_info)
     
     # REASONING ABOUT BELIEFS
     # believe and B are the same.
@@ -122,15 +129,15 @@ class Agent:
     # REASONING ABOUT GOALS - NB Think AND, OR, NOT etc will also work for goals but haven't checked this.
     # has_goal and G are the same
     def has_goal(self, key):
-		return lambda: self.goal_support(key, self.goalbase)
+    		return lambda: self.goal_support(key, self.goalbase)
 
     def G(self, key):
-		return lambda: self.goal_support(key, self.goalbase)
+    		return lambda: self.goal_support(key, self.goalbase)
 
     def goal_support(self, key, goalbase):
-		if (key in goalbase):
-			return 1
-		return 0
+    		if (key in goalbase):
+    			return 1
+    		return 0
 
     # RULES
     def add_rule(self, rule):
@@ -155,17 +162,17 @@ class Agent:
         
     #  BELIEF MANAGEMENT
     def add_belief(self, key):
-		self.beliefbase[key] = 1
+    		self.beliefbase[key] = 1
     
     def drop_belief(self, key):
         self.beliefbase[key] = 0
 
     def change_belief(self, key, value):
-		self.beliefbase[key] = value
+    		self.beliefbase[key] = value
 
     #  GOAL MANAGEMENT
     def add_goal(self, key):
-		self.goalbase.append(key)
+    		self.goalbase.append(key)
 
     def add_subgoals(self, goal, goallist):
         first_goal = goallist.pop(0)
