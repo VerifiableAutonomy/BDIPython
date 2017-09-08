@@ -1,9 +1,9 @@
-from bdiagent import Agent
+import bdiagent
 
-class Pi2GoAgent(Agent):
+class Pi2GoAgent(bdiagent.Agent):
 
     def __init__(self):
-        Agent.__init__(self)
+        bdiagent.Agent.__init__(self)
 
     def getpercepts(self, beliefbase):
         dist = 50
