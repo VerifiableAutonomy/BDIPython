@@ -1,0 +1,35 @@
+\newcounter{lst}[section]
+
+\renewcommand{\thelst}{\arabic{section}.\arabic{lst}}
+
+\lstnewenvironment{codelisting}[2]{
+  \noindent        
+  \label{code:#1}  
+\lstset{language=#2,          
+  basicstyle=\normalfont\scriptsize\sffamily,
+  %breaklines=true,
+%%%  basicstyle=\footnotesize,    
+  xleftmargin=5pt,    
+  mathescape=true,    
+  frame=tb,    
+  numbers=right,    
+  numberstyle=\tiny,     
+  stepnumber=1,     
+  numbersep=-5pt}}{}
+
+\lstnewenvironment{pythonlisting}{
+  \noindent        
+\lstset{language=python,          
+  basicstyle=\normalfont\scriptsize\sffamily,
+  %breaklines=true,
+%%%  basicstyle=\footnotesize,    
+  xleftmargin=5pt,    
+  mathescape=true,    
+  frame=tb,    
+  numbers=right,    
+  numberstyle=\tiny,     
+  stepnumber=1,
+  showstringspaces=false,
+  numbersep=-5pt}}{}
+
+

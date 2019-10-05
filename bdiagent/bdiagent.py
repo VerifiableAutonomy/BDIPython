@@ -98,7 +98,7 @@ class Agent:
         return lambda: self.believe_support(key, self.beliefbase)
 
     def believe_support(self, key, beliefbase):
-        print('checking '), key
+        # print('checking '), key
         if (key in beliefbase):
             return beliefbase[key]
         return 0
